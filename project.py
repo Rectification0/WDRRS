@@ -63,7 +63,7 @@ def generate_bill():
         print("\n⚠️ Cannot generate bill — cart is empty.")
         return
     total = sum(PRODUCTS[item] * qty for item, qty in cart.items())
-    tax = round(total * 0.05, 2)
+    tax = round(total * 0.18, 2)
     final = total + tax
 
     bill = []
@@ -79,7 +79,7 @@ def generate_bill():
 
     bill.append("-" * 35)
     bill.append(f"Subtotal: ₹{total}")
-    bill.append(f"Tax (5%): ₹{tax}")
+    bill.append(f"Tax (18%): ₹{tax}")
     bill.append(f"Total: ₹{final}")
     bill.append("=" * 35)
     bill.append("Thank you for shopping at SmartMart!")
