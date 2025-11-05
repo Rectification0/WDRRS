@@ -61,9 +61,49 @@ def generate_bill():
     if not cart:
         print("\n⚠️ Cannot generate bill — cart is empty.")
         return
+
     total = sum(PRODUCTS[item] * qty for item, qty in cart.items())
     tax = round(total * 0.18, 2)
     final = total + tax
+
+    # Display bill before payment selection
+    print("\n🧾 Generating Bill:")
+    print("=" * 35)
+    print(" SMARTMART BILL")
+    print("=" * 35)
+    print(f"Date: {datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')}")
+    print("-" * 35)
+    for item, qty in cart.items():
+        cost = PRODUCTS[item] * qty
+        print(f"{item.title():15s} x {qty:<3d} = ₹{cost}")
+    print("-" * 35)
+    print(f"Subtotal: ₹{total}")
+    print(f"Tax (18%): ₹{tax}")
+    print(f"Total: ₹{final}")
+    print("=" * 35)
+
+    # Payment options
+    print("\nSelect Payment Method:")
+    print("1. Cash")
+    print("2. Credit Card")
+    print("3. UPI")
+    print("4. Debit Card")
+    while True:
+        payment_choice = input("\nEnter payment method (1-4): ")
+        payment_methods = {
+            "1": "Cash",
+            "2": "Credit Card",
+            "3": "UPI",
+            "4": "Debit Card"
+        }
+        if payment_choice in payment_methods:
+            payment_method = payment_methods[payment_choice]
+            print(f"✅ Payment selected: {payment_method}")
+            break
+        else:
+            print("❌ Invalid payment method. Please choose 1-4.")
+
+    # Generate final bill with payment method
     bill = []
     bill.append("=" * 35)
     bill.append(" SMARTMART BILL")
@@ -77,18 +117,23 @@ def generate_bill():
     bill.append(f"Subtotal: ₹{total}")
     bill.append(f"Tax (18%): ₹{tax}")
     bill.append(f"Total: ₹{final}")
+    bill.append(f"Payment Method: {payment_method}")
     bill.append("=" * 35)
     bill.append("Thank you for shopping at SmartMart!")
     bill.append("=" * 35)
     bill_text = "\n".join(bill)
-    # Print to screen
+
+    # Print final bill to screen
     print("\n" + bill_text)
+
     # Save to file
     if os.path.exists("bill.txt"):
         print("⚠️ 'bill.txt' already exists. Overwriting...")
     with open("bill.txt", "w") as f:
         f.write(bill_text)
     print("\n🧾 Bill saved as 'bill.txt' in current folder.")
+
+    # Clear cart after successful bill generation
     cart.clear()
 
 def main():
